@@ -37,11 +37,11 @@ jobs:
 
       - name: Publish to GitHub Pages
         run: |
-          git fetch origin
-          git pull origin gh-pages
+          git fetch origin gh-pages
           # build/libsに生成されたJARファイルをMavenリポジトリ形式に変換
           mkdir -p com/github/peco2282
           cp -R build/libs/* com/github/peco2282/
+          git checkout gh-pages
 
           # gh-pagesブランチにコミット
           git config --global user.name "github-actions[bot]"

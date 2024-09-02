@@ -37,7 +37,7 @@ jobs:
 
       - name: Publish to GitHub Pages
         run: |
-          git pull gh-pages
+          git pull origin gh-pages
           # build/libsに生成されたJARファイルをMavenリポジトリ形式に変換
           mkdir -p com/github/peco2282
           cp -R build/libs/* com/github/peco2282/

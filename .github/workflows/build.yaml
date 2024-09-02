@@ -37,6 +37,8 @@ jobs:
 
       - name: Publish to GitHub Pages
         run: |
+          # ローカルの変更を一時的に退避
+          git stash
           git fetch origin gh-pages
           # build/libsに生成されたJARファイルをMavenリポジトリ形式に変換
           mkdir -p com/github/peco2282

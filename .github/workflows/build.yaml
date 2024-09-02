@@ -1,0 +1,49 @@
+name: Publish to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main  # mainブランチにプッシュされたらビルドとデプロイを実行
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '18'  # 使用するJavaのバージョンを指定
+
+      - name: Cache Gradle packages
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            gradle-${{ runner.os }}
+
+      - name: Build with Gradle
+        run: ./gradlew build
+
+      - name: Publish to GitHub Pages
+        run: |
+          # build/libsに生成されたJARファイルをMavenリポジトリ形式に変換
+          mkdir -p public/repository
+          cp -R build/libs/* public/repository/
+
+          # gh-pagesブランチにコミット
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch origin
+          git checkout -b gh-pages
+          cp -R public/* .
+          git add .
+          git commit -m "Deploy Maven artifacts to GitHub Pages"
+          git push -f origin gh-pages

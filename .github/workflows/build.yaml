@@ -38,8 +38,8 @@ jobs:
       - name: Publish to GitHub Pages
         run: |
           # build/libsに生成されたJARファイルをMavenリポジトリ形式に変換
-          mkdir -p public/repository
-          cp -R build/libs/* public/repository/
+          mkdir -p com/github/peco2282
+          cp -R build/libs/* com/github/peco2282/
 
           # gh-pagesブランチにコミット
           git config --global user.name "github-actions[bot]"

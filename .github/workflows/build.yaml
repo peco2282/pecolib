@@ -37,6 +37,7 @@ jobs:
 
       - name: Publish to GitHub Pages
         run: |
+          git fetch origin
           git pull origin gh-pages
           # build/libsに生成されたJARファイルをMavenリポジトリ形式に変換
           mkdir -p com/github/peco2282
@@ -45,8 +46,7 @@ jobs:
           # gh-pagesブランチにコミット
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git fetch origin
-          git checkout -b gh-pages
+          git checkout gh-pages
           git add com/
           git commit -m "Deploy Maven artifacts to GitHub Pages"
           git push origin gh-pages

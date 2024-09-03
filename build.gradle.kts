@@ -103,10 +103,10 @@ fun buildHref(path: String) = "<a href=\"./${path}\">${path}</a>\n" +
         "<a href=\"./${sha512(path)}\">${sha512(path)}</a>\n"
 
 tasks.register("genIndex", Task::class) {
-    file("$buildPath/libs/$version").apply {
+    file("$buildPath/scm/com/github/peco2282/$archivesName/$version").apply {
         if (!exists()) mkdirs()
     }
-    val file = File("$buildPath/libs/$version/index.html")
+    val file = File("$buildPath/scm/com/github/peco2282/$archivesName/$version/index.html")
     if (!file.exists()) {
         file.createNewFile()
     }

@@ -1,14 +1,17 @@
-import org.jetbrains.kotlin.codegen.optimization.fixStack.removeAlwaysFalseIfeq
 import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.archivesName
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.utils.addToStdlib.applyIf
+import java.io.FileWriter
 
 plugins {
     kotlin("jvm") version "1.9.21"
+    `maven-publish`
 //    application
 }
 
 group = "com.github.peco2282"
-version = "1.1"
+version = "1.0"
+archivesName.set(rootProject.name)
 
 repositories {
     mavenCentral()
@@ -80,24 +83,101 @@ tasks.withType(JavaCompile::class.java).configureEach {
 tasks.getByName("jar", Jar::class) {
     destinationDirectory.set(file("$buildPath/libs/$version"))
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    from(sourceSets.main.get().allSource){
+    from(sourceSets.main.get().allSource) {
         exclude("**/**.java", "**/**/**.kt")
     }
 }
 
 tasks.getByName("compileKotlin", KotlinCompile::class) {
-    destinationDirectory.set(file("$buildDir/ktSources"))
+    destinationDirectory.set(file("$buildPath/ktSources"))
+}
+
+tasks.register("genIndex", Task::class) {
+    file("$buildPath/libs/$version").apply {
+        if (!exists()) mkdirs()
+    }
+    val file = File("$buildPath/libs/$version/index.html")
+    if (!file.exists()) {
+        file.createNewFile()
+    }
+
+    val jarName = archivesName.get() + "-" + version + ".jar"
+    val srcName = archivesName.get() + "-" + version + "-sources.jar"
+    val docName = archivesName.get() + "-" + version + "-javadoc.jar"
+    FileWriter(file).use {
+        it.append(
+            "<html lang=\"HTML5\">\n" +
+                    "<link rel=\"stylesheet\" href=\"./../../../../style.css\">\n" +
+                    "<head><title>Index of /com/github/peco2282/${version}</title></head>\n" +
+                    "<body>\n" +
+                    "<h1>Index of /com/github/peco2282/${version}</h1>\n" +
+                    "<hr>\n" +
+                    "<pre><a href=\"../index.html\">../</a>\n" +
+                    "<a href=\"./${jarName}\">${jarName}</a>\n" +
+                    "<a href=\"./${srcName}\">${srcName}</a>\n" +
+                    "<a href=\"./${docName}\">${docName}</a>\n" +
+                    "</pre>\n" +
+                    "<hr>\n" +
+                    "</body>\n" +
+                    "</html>\n"
+        )
+
+        it.close()
+    }
 }
 
 tasks.register("archiver") {
 //    destinationDirectory.set(file("$buildPath/libs/$version"))
     dependsOn(
-        tasks.jar,
+//        tasks.jar,
         tasks.getByName("sourcesJar"),
-        tasks.getByName("javadocJar")
+        tasks.getByName("javadocJar"),
+        tasks.getByName("genIndex"),
+        tasks.publish
     )
 }
 
+publishing {
+    publications {
+        create<MavenPublication>("mavenJava") {
+            from(components["java"])
+            artifact(tasks.getByName("javadocJar"))
+            artifact(tasks.getByName("sourcesJar"))
+
+            // POMファイルの設定
+            pom {
+                name.set(archivesName.get())
+                description.set("An lib for opengl")
+                url.set("https://github.com/peco2282/pecolib")
+
+                licenses {
+                    license {
+                        name.set("The Apache License, Version 2.0")
+                        url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
+                    }
+                }
+
+                developers {
+                    developer {
+                        name.set("peco2282")
+                        email.set("pecop2282@gmail.com")
+                    }
+                }
+
+                scm {
+                    connection.set("scm:git:git://github.com/peco2282/pecolib.git")
+                    developerConnection.set("scm:git:ssh://github.com:peco2282/pecolib.git")
+                    url.set("https://github.com/peco2282/pecolib")
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            url = file("$buildPath/scm").toURI()
+        }
+    }
+}
 
 
 //kotlin {

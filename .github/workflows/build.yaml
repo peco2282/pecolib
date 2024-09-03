@@ -33,18 +33,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build with Gradle
-        run: ./gradlew build
-
-      - name: Generate or Update Maven Metadata
-        run: |
-
-
-      - name: Update index.html
-        run: |
-          # index.htmlを更新 (新しいバージョンをリストに追加)
-          echo "<li>$new_version</li>" >> com/github/peco2282/index.html
-      - name: Update index.html
-        run: |
+        run: ./gradlew publish
 
       - name: Publish to GitHub Pages
         run: |
@@ -53,40 +42,8 @@ jobs:
           git fetch origin gh-pages
           # build/libsに生成されたJARファイルをMavenリポジトリ形式に変換
           mkdir -p com/github/peco2282
-          cp -R build/libs/* com/github/peco2282/
+          cp -R build/scm/* ./
           git checkout gh-pages
-          # Mavenメタデータファイルのパス
-          metadata_file="com/github/peco2282/maven-metadata.xml"
-          
-          # 新しいバージョンの取得 (例えば、artifacts/1.0.0/などのディレクトリ名)
-          new_version=$(ls com/github/peco2282 | sort -V | tail -n 1)
-          
-          # メタデータファイルが存在しない場合は作成
-          if [ ! -f "$metadata_file" ]; then
-            cat <<EOF > $metadata_file
-            <?xml version="1.0" encoding="UTF-8"?>
-            <metadata>
-              <groupId>com.github.peco2282</groupId>
-              <artifactId>OpenGl</artifactId>
-              <versioning>
-                <latest>$new_version</latest>
-                <release>$new_version</release>
-                <versions>
-                  <version>$new_version</version>
-                </versions>
-              <lastUpdated>$(date +"%Y%m%d%H%M%S")</lastUpdated>
-              </versioning>
-            </metadata>
-            EOF
-          else
-            # メタデータファイルが存在する場合は、バージョン情報を追加
-            sed -i "/<\/versions>/i \      <version>$new_version<\/version>" $metadata_file
-            sed -i "s/<latest>.*<\/latest>/<latest>$new_version<\/latest>/" $metadata_file
-            sed -i "s/<release>.*<\/release>/<release>$new_version<\/release>/" $metadata_file
-            sed -i "s/<lastUpdated>.*<\/lastUpdated>/<lastUpdated>$(date +"%Y%m%d%H%M%S")<\/lastUpdated>/" $metadata_file
-          fi
-
-          sed -i '/<\/pre>/i <a href="./'$new_version'/">'$new_version'/</a>' com/github/peco2282/index.html
 
           # gh-pagesブランチにコミット
           git config --global user.name "github-actions[bot]"

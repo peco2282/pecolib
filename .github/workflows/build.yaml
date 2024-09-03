@@ -33,7 +33,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build with Gradle
-        run: ./gradlew publish
+        run: ./gradlew archiver
 
       - name: Publish to GitHub Pages
         run: |

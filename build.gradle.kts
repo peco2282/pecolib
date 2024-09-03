@@ -84,13 +84,23 @@ tasks.getByName("jar", Jar::class) {
     destinationDirectory.set(file("$buildPath/libs/$version"))
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     from(sourceSets.main.get().allSource) {
-        exclude("**/**.java", "**/**/**.kt")
+        exclude("**/**.java", "**/**.kt")
     }
 }
 
 tasks.getByName("compileKotlin", KotlinCompile::class) {
     destinationDirectory.set(file("$buildPath/ktSources"))
 }
+fun md5(path: String) = "$path.md5"
+fun sha1(path: String) = "$path.sha1"
+fun sha256(path: String) = "$path.sha256"
+fun sha512(path: String) = "$path.sha512"
+
+fun buildHref(path: String) = "<a href=\"./${path}\">${path}</a>\n" +
+        "<a href=\"./${md5(path)}\">${md5(path)}</a>\n" +
+        "<a href=\"./${sha1(path)}\">${sha1(path)}</a>\n" +
+        "<a href=\"./${sha256(path)}\">${sha256(path)}</a>\n" +
+        "<a href=\"./${sha512(path)}\">${sha512(path)}</a>\n"
 
 tasks.register("genIndex", Task::class) {
     file("$buildPath/libs/$version").apply {
@@ -113,9 +123,9 @@ tasks.register("genIndex", Task::class) {
                     "<h1>Index of /com/github/peco2282/${version}</h1>\n" +
                     "<hr>\n" +
                     "<pre><a href=\"../index.html\">../</a>\n" +
-                    "<a href=\"./${jarName}\">${jarName}</a>\n" +
-                    "<a href=\"./${srcName}\">${srcName}</a>\n" +
-                    "<a href=\"./${docName}\">${docName}</a>\n" +
+                    buildHref(jarName) +
+                    buildHref(srcName) +
+                    buildHref(docName) +
                     "</pre>\n" +
                     "<hr>\n" +
                     "</body>\n" +
@@ -130,8 +140,8 @@ tasks.register("archiver") {
 //    destinationDirectory.set(file("$buildPath/libs/$version"))
     dependsOn(
 //        tasks.jar,
-        tasks.getByName("sourcesJar"),
-        tasks.getByName("javadocJar"),
+//        tasks.getByName("sourcesJar"),
+//        tasks.getByName("javadocJar"),
         tasks.getByName("genIndex"),
         tasks.publish
     )

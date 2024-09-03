@@ -39,10 +39,10 @@
           "name": "OpenGl-1.0.jar",
           "url": "OpenGl-1.0.jar",
           "size": 136253,
-          "sha512": "e0b5ce1223db7a668d8a8a922b4ca7676f35a375df105a8c4c3c665fcca92581257e09b1b549c56cc0b9fee45a39376fc8a06dba80f0b1fc3251ec6f960ce833",
-          "sha256": "59832fec5a586e06c27363e0503f6684fcc95a4e72628ea3eb29c3416390b428",
-          "sha1": "357949bae3e3795b2881ff00c8a4e377f141c0ad",
-          "md5": "d553ffc3c3dc80326f91df6a385a227e"
+          "sha512": "efd2a5a121d67d8fdebe0440adf9157873619b922cb3968465fb5e41ba171546197059633eaa913029bf44b5848aa3b085b0f16d65ce7bfa7df5e483dc97554b",
+          "sha256": "b78aab96d4e66e608f0a26ced27b29725a4dfca63a596a4b7da7a3fcc7f27d4e",
+          "sha1": "415c1869682c33503e599253a8ff092ce66bb941",
+          "md5": "6afd7f8cfe82db7016abcf6c11ebbcbc"
         }
       ]
     },
@@ -173,10 +173,10 @@
           "name": "OpenGl-1.0.jar",
           "url": "OpenGl-1.0.jar",
           "size": 136253,
-          "sha512": "e0b5ce1223db7a668d8a8a922b4ca7676f35a375df105a8c4c3c665fcca92581257e09b1b549c56cc0b9fee45a39376fc8a06dba80f0b1fc3251ec6f960ce833",
-          "sha256": "59832fec5a586e06c27363e0503f6684fcc95a4e72628ea3eb29c3416390b428",
-          "sha1": "357949bae3e3795b2881ff00c8a4e377f141c0ad",
-          "md5": "d553ffc3c3dc80326f91df6a385a227e"
+          "sha512": "efd2a5a121d67d8fdebe0440adf9157873619b922cb3968465fb5e41ba171546197059633eaa913029bf44b5848aa3b085b0f16d65ce7bfa7df5e483dc97554b",
+          "sha256": "b78aab96d4e66e608f0a26ced27b29725a4dfca63a596a4b7da7a3fcc7f27d4e",
+          "sha1": "415c1869682c33503e599253a8ff092ce66bb941",
+          "md5": "6afd7f8cfe82db7016abcf6c11ebbcbc"
         }
       ]
     }

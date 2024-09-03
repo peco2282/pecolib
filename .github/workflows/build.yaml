@@ -41,8 +41,8 @@ jobs:
           git stash -u
           git fetch origin gh-pages
           # build/libsに生成されたJARファイルをMavenリポジトリ形式に変換
-          cp -R build/scm/* ./
           git checkout gh-pages
+          cp -R build/scm/* ./
 
           # gh-pagesブランチにコミット
           git config --global user.name "github-actions[bot]"
